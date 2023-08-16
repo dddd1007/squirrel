@@ -95,17 +95,3 @@
   * yaml-cpp  (MIT License)
 
 感謝王公子捐贈開發用機。
-
-問題與反饋
----
-
-發現程序有 BUG，或建議，或感想，請反饋到
-https://github.com/rime/home/issues
-
-聯繫方式
----
-
-技術交流，歡迎光臨 [Rime 代碼之家](https://github.com/rime/home)，
-或致信 Rime 開發者 <rimeime@gmail.com>。
-
-謝謝
