@@ -3,9 +3,6 @@
 all: release
 install: install-release
 
-# Change to `xcode/dist-with-icu` if boost is linked to icu libraries.
-RIME_DIST_TARGET = xcode/dist
-
 RIME_BIN_DIR = librime/dist/bin
 RIME_LIB_DIR = librime/dist/lib
 
@@ -39,10 +36,10 @@ $(RIME_LIBRARY):
 	$(MAKE) librime
 
 $(RIME_DEPS):
-	$(MAKE) -C librime xcode/deps
+	$(MAKE) -C librime deps
 
 librime: $(RIME_DEPS)
-	$(MAKE) -C librime $(RIME_DIST_TARGET)
+	$(MAKE) -C librime release install
 	$(MAKE) copy-rime-binaries
 
 copy-rime-binaries:
@@ -67,7 +64,7 @@ plum-data:
 	$(MAKE) copy-plum-data
 
 opencc-data:
-	$(MAKE) -C librime xcode/deps/opencc
+	$(MAKE) -C librime deps/opencc
 	$(MAKE) copy-opencc-data
 
 copy-plum-data:
@@ -80,6 +77,12 @@ copy-opencc-data:
 	cp $(OPENCC_DATA_OUTPUT) data/opencc/
 
 deps: librime data
+
+clang-format-lint:
+	find . -name '*.m' -o -name '*.h' -maxdepth 1 | xargs clang-format -Werror --dry-run || { echo Please lint your code by '"'"make clang-format-apply"'"'.; false; }
+
+clang-format-apply:
+	find . -name '*.m' -o -name '*.h' -maxdepth 1 | xargs clang-format --verbose -i
 
 ifdef ARCHS
 BUILD_SETTINGS += ARCHS="$(ARCHS)"
@@ -170,5 +173,5 @@ clean:
 
 clean-deps:
 	$(MAKE) -C plum clean
-	$(MAKE) -C librime xcode/clean
+	$(MAKE) -C librime clean
 	$(MAKE) clean-sparkle
